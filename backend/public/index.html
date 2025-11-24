@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>n8n Workflow AI Builder</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="page-header">
+        <h1>n8n Workflow AI Builder</h1>
+        <p class="subtitle">自然言語から n8n ワークフローを自動生成してデプロイ</p>
+      </header>
+
+      <section class="card" id="section-input">
+        <h2>1. 自動化したい内容を入力</h2>
+        <p class="description">毎朝のレポート送信や Slack 通知など、実現したい自動化フローを日本語で書いてください。</p>
+        <label for="descriptionInput" class="field-label">自動化内容</label>
+        <textarea id="descriptionInput" rows="7" placeholder="例: 毎朝 9 時に最新の販売レポートをまとめて、チームの Slack チャンネルへ送信する"></textarea>
+        <div class="field-inline">
+          <label for="topKInput">参考テンプレ数</label>
+          <input type="number" id="topKInput" min="1" max="10" value="5" />
+        </div>
+        <label for="apiBaseInput" class="field-label">APIベースURL（空なら同一オリジン）</label>
+        <input
+          type="text"
+          id="apiBaseInput"
+          class="text-input"
+          placeholder="例: https://b2c.example.com"
+        />
+        <label for="openaiApiKeyInput" class="field-label">OpenAI APIキー（任意 / ブラウザ内でのみ使用）</label>
+        <input
+          type="password"
+          id="openaiApiKeyInput"
+          class="text-input"
+          placeholder="空ならサーバーの .env を使用"
+        />
+        <label for="n8nApiUrlInput" class="field-label">n8n API URL（任意）</label>
+        <input
+          type="text"
+          id="n8nApiUrlInput"
+          class="text-input"
+          placeholder="例: https://n8n.example.com"
+        />
+        <label for="n8nApiKeyInput" class="field-label">n8n APIキー（任意 / ブラウザ内でのみ使用）</label>
+        <input
+          type="password"
+          id="n8nApiKeyInput"
+          class="text-input"
+          placeholder="空ならサーバーの .env を使用"
+        />
+        <label class="field-inline toggle-row" for="enableWebSearchInput">
+          <span>Web検索やスクレイピング用の情報をAIに渡す</span>
+          <input type="checkbox" id="enableWebSearchInput" />
+        </label>
+        <label for="targetUrlsInput" class="field-label">対象URL（1行につき1つ）</label>
+        <textarea id="targetUrlsInput" rows="4" placeholder="https://example.com\nhttps://example.com/page2"></textarea>
+        <button id="generateButton" class="primary">AIでワークフロー案を生成</button>
+        <div id="generateStatus" class="status"></div>
+      </section>
+
+      <section class="card" id="section-preview">
+        <h2>2. 生成されたワークフロー案</h2>
+        <div class="preview-grid">
+          <div>
+            <h3>類似テンプレ</h3>
+            <div id="similarTemplates" class="templates-grid"></div>
+          </div>
+          <div class="json-preview">
+            <div class="json-preview-header">
+              <h3>ワークフロー JSON</h3>
+              <button id="copyJsonButton" class="secondary">JSONをコピー</button>
+            </div>
+            <pre id="workflowJsonPreview" class="code-block"></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="section-deploy">
+        <h2>3. n8n にデプロイ</h2>
+        <p class="description">生成されたワークフローを、自分の n8n インスタンスに作成します。</p>
+        <button id="deployButton" class="primary" disabled>n8n にデプロイ</button>
+        <div id="deployResult" class="status"></div>
+      </section>
+
+      <p class="note">※ OpenAI APIキー と n8n APIキー はサーバーの .env で設定されている前提です。ブラウザ上では扱いません。</p>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

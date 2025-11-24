@@ -1,0 +1,5 @@
+
+> n8n-free-templates@1.0.0 dev
+> ts-node src/server.ts
+
+✅ Server listening on http://localhost:3001

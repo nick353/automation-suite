@@ -1,0 +1,5 @@
+{
+  "name": "n8n Workflow AI Builder",
+  "description": "An intelligent interface to generate n8n automation workflows from natural language, powered by Gemini 2.5.",
+  "requestFramePermissions": []
+}
