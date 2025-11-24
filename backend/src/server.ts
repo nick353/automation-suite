@@ -10,15 +10,21 @@ import { buildExternalContext } from './externalContext';
 
 const app = express();
 
+const publicDir = path.join(__dirname, '..', 'public');
+const distDir = path.join(publicDir, 'dist');
+
 // JSONボディと静的ファイル
 app.use(express.json({ limit: '2mb' }));
-app.use(express.static('public'));
+// 先に dist 配下のビルド済みアセットを配信
+app.use(express.static(distDir));
+// public 直下は index.html を自動返却しない（手動で新旧を切替）
+app.use(express.static(publicDir, { index: false }));
 
 // フロントエンド（Viteビルド）の index.html を優先的に返す
 app.get('/', (_req, res, next) => {
   try {
-    const distIndex = path.join(__dirname, '..', 'public', 'dist', 'index.html');
-    const legacyIndex = path.join(__dirname, '..', 'public', 'index.html');
+    const distIndex = path.join(distDir, 'index.html');
+    const legacyIndex = path.join(publicDir, 'index.html');
     const target = fs.existsSync(distIndex) ? distIndex : legacyIndex;
     return res.sendFile(target);
   } catch (err) {
